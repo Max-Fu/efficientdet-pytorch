@@ -209,8 +209,8 @@ efficientdet_model_param_dict = dict(
     ),
     vitsmalldet=dict(
         name='vitsmalldet',
-        backbone_name='vit_small_patch16_384',
-        image_size=(384, 384),
+        backbone_name='vit_small_patch16_224',
+        image_size=(224, 224),
         fpn_channels=88,
         fpn_cell_repeats=4,
         box_class_repeats=3,

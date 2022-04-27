@@ -31,6 +31,19 @@ class VocParserCfg:
     min_img_size: int = 32
     ignore_empty_gt: bool = False
 
+@dataclass
+class DoHParserCfg:
+    split_filename: str
+    ann_filename: str
+    img_filename: str = '%.jpg'
+    keep_difficult: bool = True
+    classes: list = ('__background__', 'targetobject', 'hand')
+    add_background: bool = True
+    has_labels: bool = True
+    bbox_yxyx: bool = True
+    min_img_size: int = 32
+    ignore_empty_gt: bool = False
+
 
 @dataclass
 class OpenImagesParserCfg:

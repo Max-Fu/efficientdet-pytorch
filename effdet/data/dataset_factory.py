@@ -40,10 +40,14 @@ def create_dataset(name, root, splits=('train', 'val')):
     elif name.startswith('voc'):
         if 'voc0712' in name:
             dataset_cfg = Voc0712Cfg()
-        elif 'voc2007' in name:
+        elif 'voc2007' in name or 'vocdoh' in name:
             dataset_cfg = Voc2007Cfg()
         else:
             dataset_cfg = Voc2012Cfg()
+        if 'vocdoh' in name:
+            parsercfg = DoHParserCfg
+        else:
+            parsercfg = VocParserCfg
         for s in splits:
             if s not in dataset_cfg.splits:
                 raise RuntimeError(f'{s} split not found in config')
@@ -53,7 +57,7 @@ def create_dataset(name, root, splits=('train', 'val')):
                 parser = None
                 for sf, af, id in zip(
                         split_cfg['split_filename'], split_cfg['ann_filename'], split_cfg['img_dir']):
-                    parser_cfg = VocParserCfg(
+                    parser_cfg = parsercfg(
                         split_filename=root / sf,
                         ann_filename=os.path.join(root, af),
                         img_filename=os.path.join(id, dataset_cfg.img_filename))
@@ -63,7 +67,7 @@ def create_dataset(name, root, splits=('train', 'val')):
                         other_parser = create_parser(dataset_cfg.parser, cfg=parser_cfg)
                         parser.merge(other=other_parser)
             else:
-                parser_cfg = VocParserCfg(
+                parser_cfg = parsercfg(
                     split_filename=root / split_cfg['split_filename'],
                     ann_filename=os.path.join(root, split_cfg['ann_filename']),
                     img_filename=os.path.join(split_cfg['img_dir'], dataset_cfg.img_filename),
